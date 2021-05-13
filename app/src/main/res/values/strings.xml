@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MovieDatabase</string>
+    <string name="title">Название фильма</string>
+    <string name="release_date">20 марта 2021</string>
+    <string name="rate">7.5</string>
+    <string name="rate_title">Рейтинг:</string>
 </resources>
