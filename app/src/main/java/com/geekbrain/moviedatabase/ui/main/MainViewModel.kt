@@ -1,6 +1,5 @@
 package com.geekbrain.moviedatabase.ui.main
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.geekbrain.moviedatabase.AppState
@@ -22,7 +21,13 @@ class MainViewModel(
         liveDataToObserve.value = AppState.Loading
         Thread {
             Thread.sleep(1000)
-            liveDataToObserve.postValue(AppState.Success(repositoryImpl.getMovieListLocal()))
+            liveDataToObserve.postValue(
+                AppState.Success(
+                    repositoryImpl.getMovieListMostPopularLocal(),
+                    repositoryImpl.getMovieListLatestReleasedLocal()
+                )
+            )
+
         }.start()
     }
 
