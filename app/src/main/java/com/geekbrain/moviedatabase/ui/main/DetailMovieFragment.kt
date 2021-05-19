@@ -24,17 +24,18 @@ class DetailMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movie = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)
-        initView(movie)
+        arguments?.getParcelable<Movie>(BUNDLE_EXTRA)?.let { initView(it) }
     }
 
-    private fun initView(movie: Movie?) {
-        if (movie != null) {
-            binding!!.detailTitle.text = movie.title
-            binding!!.detailDateRelease.text = movie.release_date
-            binding!!.detailDescription.text = context!!.resources.getText(movie.overview!!)
-            binding!!.detailPoster.setImageResource(movie.posterPath!!)
-            binding!!.detailRate.text = movie.rate.toString()
+    private fun initView(movie: Movie) {
+        binding?.apply {
+            detailTitle.text = movie.title
+            detailDateRelease.text = movie.release_date
+            detailDescription.text = movie.overview?.let { it ->
+                context?.resources?.getText(it)
+            }
+            movie.posterPath?.let { it -> detailPoster.setImageResource(it) }
+            detailRate.text = movie.rate.toString()
         }
     }
 
@@ -46,11 +47,6 @@ class DetailMovieFragment : Fragment() {
     companion object {
         const val BUNDLE_EXTRA = "movie"
 
-        fun newInstance(bundle: Bundle): DetailMovieFragment {
-            val fragment = DetailMovieFragment()
-            fragment.arguments = bundle
-            return fragment
-
-        }
+        fun newInstance(bundle: Bundle) = DetailMovieFragment().also { it.arguments = bundle }
     }
 }

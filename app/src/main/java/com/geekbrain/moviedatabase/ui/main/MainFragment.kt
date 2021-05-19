@@ -12,6 +12,7 @@ import com.geekbrain.moviedatabase.R
 import com.geekbrain.moviedatabase.databinding.MainFragmentBinding
 import com.geekbrain.moviedatabase.model.Movie
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
@@ -20,18 +21,10 @@ class MainFragment : Fragment() {
     }
 
     private var binding: MainFragmentBinding? = null
-    private val adapterPopularMovieRV = MovieListAdapter(object : OnItemViewClickListener {
-        override fun onItemViewClick(movie: Movie) {
-            showDetailFragment(movie)
-        }
-    })
-    private val adapterLatestMovieRV = MovieListAdapter(object : OnItemViewClickListener {
-        override fun onItemViewClick(movie: Movie) {
-            showDetailFragment(movie)
-        }
-    })
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
 
 
     override fun onCreateView(
@@ -44,18 +37,18 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        viewModel.getMovieListFromLocalSource()
+        viewModel.apply {
+            getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+            getMovieListFromLocalSource()
+        }
     }
 
     private fun showDetailFragment(movie: Movie) {
-        val manager = activity?.supportFragmentManager
-        if (manager != null) {
-            val bundle = Bundle()
-            bundle.putParcelable(DetailMovieFragment.BUNDLE_EXTRA, movie)
-            manager.beginTransaction()
-                .add(R.id.container, DetailMovieFragment.newInstance(bundle))
+        activity?.supportFragmentManager?.apply {
+            beginTransaction()
+                .add(R.id.container, DetailMovieFragment.newInstance(Bundle().apply {
+                    putParcelable(DetailMovieFragment.BUNDLE_EXTRA, movie)
+                }))
                 .addToBackStack("")
                 .commitAllowingStateLoss()
         }
@@ -64,25 +57,26 @@ class MainFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                val movieListPopular: List<Movie> = appState.movieListPopular
-                val movieListLatest: List<Movie> = appState.movieListLatest
-                    Snackbar.make(view!!, "Success", Snackbar.LENGTH_LONG).show()
-                initMovieList(movieListPopular, movieListLatest)
+                main.showSnackBar("Списки фильмов")
+                initMovieList(appState.movieListPopular, appState.movieListLatest)
             }
-            is AppState.Loading -> Snackbar.make(view!!, "Загружаем", Snackbar.LENGTH_LONG).show()
+            is AppState.Loading -> main.showSnackBar("Loading...")
             is AppState.Error -> {
-                Snackbar
-                    .make(view!!, "Error", Snackbar.LENGTH_INDEFINITE)
+                main.showSnackBar("Error occured")
                     .setAction("Reload") { viewModel.getMovieListFromLocalSource() }
-                    .show()
             }
         }
     }
 
+    private fun View.showSnackBar(text: String) = Snackbar.make(this, text, Snackbar.LENGTH_LONG).also { it.show() }
+
+
     override fun onDestroy() {
         super.onDestroy()
-        adapterLatestMovieRV.removeListener()
-        adapterPopularMovieRV.removeListener()
+        binding?.apply {
+            movieListPopular.adapter = null
+            movieListLatest.adapter = null
+        }
         binding = null
     }
 
@@ -91,20 +85,27 @@ class MainFragment : Fragment() {
     }
 
     private fun initMovieList(movieListPopular: List<Movie>, movieListLatest: List<Movie>) {
-
-        val movieListPopularRV: RecyclerView = binding!!.movieListPopular
-        val movieListLatestRV: RecyclerView = binding!!.movieListLatest
-        //добавляем разделители
+//добавляем разделители
         val itemDecoration =
             HorizontalItemDecoration(resources.getDimensionPixelOffset(R.dimen.list_space_width))
 
-        movieListPopularRV.addItemDecoration(itemDecoration)
-        movieListLatestRV.addItemDecoration(itemDecoration)
+        binding?.movieListPopular?.apply {
+            addItemDecoration(itemDecoration)
+            adapter = MovieListAdapter(object : OnItemViewClickListener {
+                override fun onItemViewClick(movie: Movie) = showDetailFragment(movie)
+            }).also {
+                it.setMovieList(movieListPopular)
+            }
+        }
 
-        adapterPopularMovieRV.setMovieList(movieListPopular)
-        movieListPopularRV.adapter = adapterPopularMovieRV
+        binding?.movieListLatest?.apply {
+            addItemDecoration(itemDecoration)
+            adapter = MovieListAdapter(object : OnItemViewClickListener {
+                override fun onItemViewClick(movie: Movie) = showDetailFragment(movie)
+            }).also {
+                it.setMovieList(movieListLatest)
+            }
+        }
 
-        adapterLatestMovieRV.setMovieList(movieListLatest)
-        movieListLatestRV.adapter = adapterLatestMovieRV
     }
 }
