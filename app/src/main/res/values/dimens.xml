@@ -7,4 +7,8 @@
     <dimen name="item_height">350dp</dimen>
     <dimen name="item_poster_height">225dp</dimen>
     <dimen name="item_title_height">50dp</dimen>
+    <dimen name="detail_poster_width">300dp</dimen>
+    <dimen name="detail_poster_Height">450dp</dimen>
+    <dimen name="detail_linear_margin">30dp</dimen>
+    <dimen name="overwrite_text_size">16sp</dimen>
 </resources>
