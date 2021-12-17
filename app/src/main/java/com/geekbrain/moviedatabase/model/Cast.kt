@@ -10,4 +10,4 @@ data class Cast(
     val gender: Int,
     val character: String,
     val profilePath: String?
-): Parcelable
+):Parcelable

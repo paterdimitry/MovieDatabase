@@ -14,7 +14,10 @@ class HorizontalItemDecoration(private val horizontalSpaceWidth: Int) : ItemDeco
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        outRect.right = horizontalSpaceWidth
-        outRect.left = horizontalSpaceWidth
+        outRect.apply {
+            right = horizontalSpaceWidth
+            left = horizontalSpaceWidth
+        }
+
     }
 }

@@ -14,15 +14,11 @@ import com.geekbrain.moviedatabase.model.Movie
 class MovieListAdapter(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) :
     RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
 
-    private var movieList:List<Movie> = listOf()
+    private var movieList: List<Movie> = listOf()
 
-    fun setMovieList(data: List<Movie>){
+    fun setMovieList(data: List<Movie>) {
         movieList = data
         notifyDataSetChanged()
-    }
-
-    fun removeListener() {
-        onItemViewClickListener = null
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,27 +36,17 @@ class MovieListAdapter(private var onItemViewClickListener: MainFragment.OnItemV
     override fun getItemCount() = movieList.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var titleTextView: TextView? = null
-        var releaseDateTextView: TextView? = null
-        var rateTextView: TextView? = null
-        var posterImageView: ImageView? = null
-
-        init {
-            titleTextView = itemView.findViewById(R.id.title)
-            releaseDateTextView = itemView.findViewById(R.id.releaseDate)
-            rateTextView = itemView.findViewById(R.id.rate)
-            posterImageView = itemView.findViewById(R.id.poster)
-        }
 
         fun bind(movie: Movie) {
-            titleTextView!!.text = movie.title
-            releaseDateTextView!!.text = movie.release_date
-            rateTextView!!.text = movie.rate.toString()
-            posterImageView!!.setImageResource(movie.posterPath!!)
-            itemView.setOnClickListener {
-                onItemViewClickListener?.onItemViewClick(movie)
+            itemView.apply {
+                findViewById<TextView>(R.id.title).text = movie.title
+                findViewById<TextView>(R.id.releaseDate).text = movie.release_date
+                findViewById<TextView>(R.id.rate).text = movie.rate.toString()
+                movie.posterPath?.let { findViewById<ImageView>(R.id.poster).setImageResource(it) }
+                itemView.setOnClickListener {
+                    onItemViewClickListener?.onItemViewClick(movie)
+                }
             }
-
         }
     }
 }
