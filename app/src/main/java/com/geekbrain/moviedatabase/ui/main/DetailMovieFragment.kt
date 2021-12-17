@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.geekbrain.moviedatabase.R
 import com.geekbrain.moviedatabase.databinding.FragmentDetailMovieBinding
 import com.geekbrain.moviedatabase.databinding.MainFragmentBinding
@@ -12,14 +14,13 @@ import com.geekbrain.moviedatabase.model.Movie
 
 class DetailMovieFragment : Fragment() {
 
-    private var binding: FragmentDetailMovieBinding? = null
+    private val binding: FragmentDetailMovieBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailMovieBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,7 +29,7 @@ class DetailMovieFragment : Fragment() {
     }
 
     private fun initView(movie: Movie) {
-        binding?.apply {
+        binding.apply {
             detailTitle.text = movie.title
             detailDateRelease.text = movie.release_date
             detailDescription.text = movie.overview?.let { it ->
@@ -37,11 +38,6 @@ class DetailMovieFragment : Fragment() {
             movie.posterPath?.let { it -> detailPoster.setImageResource(it) }
             detailRate.text = movie.rate.toString()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
     }
 
     companion object {

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.geekbrain.moviedatabase.AppState
 import com.geekbrain.moviedatabase.R
 import com.geekbrain.moviedatabase.databinding.MainFragmentBinding
@@ -20,10 +22,10 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    private var binding: MainFragmentBinding? = null
+    private val binding: MainFragmentBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+        ViewModelProvider(this)[MainViewModel::class.java]
     }
 
 
@@ -31,12 +33,11 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainFragmentBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.apply {
             getLiveData().observe(viewLifecycleOwner, { renderData(it) })
             getMovieListFromLocalSource()
@@ -57,27 +58,27 @@ class MainFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                main.showSnackBar("Списки фильмов")
+                main.showSnackBar(getString(R.string.MovieList))
                 initMovieList(appState.movieListPopular, appState.movieListLatest)
             }
-            is AppState.Loading -> main.showSnackBar("Loading...")
+            is AppState.Loading -> main.showSnackBar(getString(R.string.loading))
             is AppState.Error -> {
-                main.showSnackBar("Error occured")
-                    .setAction("Reload") { viewModel.getMovieListFromLocalSource() }
+                main.showSnackBar(getString(R.string.Error))
+                    .setAction(getString(R.string.reload)) { viewModel.getMovieListFromLocalSource() }
             }
         }
     }
 
-    private fun View.showSnackBar(text: String) = Snackbar.make(this, text, Snackbar.LENGTH_LONG).also { it.show() }
+    private fun View.showSnackBar(text: String) =
+        Snackbar.make(this, text, Snackbar.LENGTH_LONG).also { it.show() }
 
 
     override fun onDestroy() {
         super.onDestroy()
-        binding?.apply {
+        binding.apply {
             movieListPopular.adapter = null
             movieListLatest.adapter = null
         }
-        binding = null
     }
 
     interface OnItemViewClickListener {
@@ -89,7 +90,7 @@ class MainFragment : Fragment() {
         val itemDecoration =
             HorizontalItemDecoration(resources.getDimensionPixelOffset(R.dimen.list_space_width))
 
-        binding?.movieListPopular?.apply {
+        binding.movieListPopular.apply {
             addItemDecoration(itemDecoration)
             adapter = MovieListAdapter(object : OnItemViewClickListener {
                 override fun onItemViewClick(movie: Movie) = showDetailFragment(movie)
@@ -98,7 +99,7 @@ class MainFragment : Fragment() {
             }
         }
 
-        binding?.movieListLatest?.apply {
+        binding.movieListLatest.apply {
             addItemDecoration(itemDecoration)
             adapter = MovieListAdapter(object : OnItemViewClickListener {
                 override fun onItemViewClick(movie: Movie) = showDetailFragment(movie)
