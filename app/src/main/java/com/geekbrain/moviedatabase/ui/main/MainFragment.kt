@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.geekbrain.moviedatabase.AppState
 import com.geekbrain.moviedatabase.R
 import com.geekbrain.moviedatabase.databinding.MainFragmentBinding
-import com.geekbrain.moviedatabase.model.Movie
+import com.geekbrain.moviedatabase.model.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -40,11 +40,31 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.apply {
             getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-            getMovieListFromLocalSource()
+            initSpinner()
         }
     }
 
-    private fun showDetailFragment(movie: Movie) {
+    //инициализатор Spinner. При выборе категории списка запрашиваем у ViewModel данные для отображения
+    private fun initSpinner() {
+        val spinner = binding.spinner
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                main.showSnackBar(position.toString())
+                viewModel.getMovieList(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                main.showSnackBar(getString(R.string.nothing))
+            }
+        }
+    }
+
+    private fun showDetailFragment(movie: MovieDTO) {
         activity?.supportFragmentManager?.apply {
             beginTransaction()
                 .add(R.id.container, DetailMovieFragment.newInstance(Bundle().apply {
@@ -58,13 +78,12 @@ class MainFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                main.showSnackBar(getString(R.string.MovieList))
-                initMovieList(appState.movieListPopular, appState.movieListLatest)
+                initMovieList(appState.movieList)
             }
             is AppState.Loading -> main.showSnackBar(getString(R.string.loading))
             is AppState.Error -> {
                 main.showSnackBar(getString(R.string.Error))
-                    .setAction(getString(R.string.reload)) { viewModel.getMovieListFromLocalSource() }
+                    .setAction(getString(R.string.reload)) { viewModel.getMovieList(0) }
             }
         }
     }
@@ -72,41 +91,29 @@ class MainFragment : Fragment() {
     private fun View.showSnackBar(text: String) =
         Snackbar.make(this, text, Snackbar.LENGTH_LONG).also { it.show() }
 
-
     override fun onDestroy() {
         super.onDestroy()
         binding.apply {
-            movieListPopular.adapter = null
-            movieListLatest.adapter = null
+            movieList.adapter = null
         }
     }
 
     interface OnItemViewClickListener {
-        fun onItemViewClick(movie: Movie)
+        fun onItemViewClick(movie: MovieDTO)
     }
 
-    private fun initMovieList(movieListPopular: List<Movie>, movieListLatest: List<Movie>) {
+    private fun initMovieList(movieList: List<MovieDTO>) {
 //добавляем разделители
         val itemDecoration =
             HorizontalItemDecoration(resources.getDimensionPixelOffset(R.dimen.list_space_width))
 
-        binding.movieListPopular.apply {
+        binding.movieList.apply {
             addItemDecoration(itemDecoration)
             adapter = MovieListAdapter(object : OnItemViewClickListener {
-                override fun onItemViewClick(movie: Movie) = showDetailFragment(movie)
+                override fun onItemViewClick(movie: MovieDTO) = showDetailFragment(movie)
             }).also {
-                it.setMovieList(movieListPopular)
+                it.setMovieList(movieList, context)
             }
         }
-
-        binding.movieListLatest.apply {
-            addItemDecoration(itemDecoration)
-            adapter = MovieListAdapter(object : OnItemViewClickListener {
-                override fun onItemViewClick(movie: Movie) = showDetailFragment(movie)
-            }).also {
-                it.setMovieList(movieListLatest)
-            }
-        }
-
     }
 }

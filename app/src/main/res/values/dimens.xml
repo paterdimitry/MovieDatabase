@@ -11,4 +11,6 @@
     <dimen name="detail_poster_Height">450dp</dimen>
     <dimen name="detail_linear_margin">30dp</dimen>
     <dimen name="overwrite_text_size">16sp</dimen>
+    <dimen name="padding">10dp</dimen>
+    <dimen name="text_size">16sp</dimen>
 </resources>

@@ -55,7 +55,7 @@
         кто носит метку. Здесь прибывшие тренируются с опытными воинами Лю Каном и Кун Лао,
         готовясь противостоять врагам из Внешнего мира, а для этого им нужно раскрыть в себе аркану —
         могущественную силу души.</string>
-    <string name="latest_films">Новинки</string>
+    <string name="trends_films">В тренде</string>
     <string name="popular_films">Популярные</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -64,4 +64,13 @@
     <string name="Error">Error occured</string>
     <string name="MovieList">Списки фильмов</string>
     <string name="reload">Reload</string>
+    <string name="latest_movie">Новинка проката</string>
+    <string name="nothing">ничего</string>
+
+    <string-array name="spinner">
+        <item>Популярные</item>
+        <item>В тренде</item>
+        <item>В прокате</item>
+        <item>Скоро в прокате</item>
+    </string-array>
 </resources>
