@@ -3,7 +3,10 @@ package com.geekbrain.moviedatabase.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.geekbrain.moviedatabase.AppState
+import com.geekbrain.moviedatabase.enums.RequestType
 import com.geekbrain.moviedatabase.model.*
+import com.geekbrain.moviedatabase.repository.Repository
+import com.geekbrain.moviedatabase.repository.RepositoryImpl
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),

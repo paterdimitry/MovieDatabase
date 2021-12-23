@@ -1,4 +1,4 @@
-package com.geekbrain.moviedatabase.model
+package com.geekbrain.moviedatabase.enums
 
 //Типы запросов списков фильмов.
 enum class RequestType {

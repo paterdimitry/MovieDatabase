@@ -66,6 +66,9 @@
     <string name="reload">Reload</string>
     <string name="latest_movie">Новинка проката</string>
     <string name="nothing">ничего</string>
+    <string name="cast">В главных ролях</string>
+    <string name="actor">Актер</string>
+    <string name="character">в роли</string>
 
     <string-array name="spinner">
         <item>Популярные</item>
