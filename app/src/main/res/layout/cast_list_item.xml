@@ -17,12 +17,14 @@
         android:layout_height="@dimen/item_title_height"
         android:layout_marginStart="@dimen/margin"
         android:lines="2"
+        android:textColor="@color/white"
         android:text="@string/actor"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="16sp" />
     <TextView
         android:id="@+id/character"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin"

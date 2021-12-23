@@ -45,7 +45,7 @@ class CastListAdapter(private var onItemViewClickListener: DetailMovieFragment.O
             itemView.apply {
                 findViewById<TextView>(R.id.name).text = castDTO.name
                 findViewById<TextView>(R.id.character).text = castDTO.character
-                castDTO.profilePath?.let { getImage(it, findViewById<ImageView>(R.id.actor_image)) }
+                castDTO.profilePath?.let { getImage(it, findViewById(R.id.actor_image)) }
                 itemView.setOnClickListener {
                     onItemViewClickListener?.onItemViewClick(castDTO)
                 }

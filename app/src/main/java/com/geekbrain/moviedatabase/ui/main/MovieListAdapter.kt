@@ -45,7 +45,7 @@ class MovieListAdapter(private var onItemViewClickListener: MainFragment.OnItemV
                 findViewById<TextView>(R.id.title).text = movie.title
                 findViewById<TextView>(R.id.releaseDate).text = movie.release_date
                 findViewById<TextView>(R.id.rate).text = movie.vote_average.toString()
-                movie.poster_path?.let { getImage(it, findViewById<ImageView>(R.id.poster)) }
+                movie.poster_path?.let { getImage(it, findViewById(R.id.poster)) }
                 itemView.setOnClickListener {
                     onItemViewClickListener?.onItemViewClick(movie)
                 }
