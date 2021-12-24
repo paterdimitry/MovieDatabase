@@ -9,45 +9,45 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.geekbrain.moviedatabase.R
+import com.geekbrain.moviedatabase.model.CastDTO
 import com.geekbrain.moviedatabase.model.MovieDTO
 import java.net.URL
 
-class MovieListAdapter(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) :
-    RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
+class CastListAdapter(private var onItemViewClickListener: DetailMovieFragment.OnItemViewClickListener?) :
+    RecyclerView.Adapter<CastListAdapter.ViewHolder>() {
 
     private lateinit var context: Context
-    private var movieList: List<MovieDTO> = listOf()
+    private var cast: List<CastDTO> = listOf()
 
-    fun setMovieList(data: List<MovieDTO>, inContext: Context) {
+    fun setCastList(data: List<CastDTO>, inContext: Context) {
         context = inContext
-        movieList = data
+        cast = data
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.movie_list_item, parent, false)
+                .inflate(R.layout.cast_list_item, parent, false)
         return ViewHolder(itemView)
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(movieList[position])
+        holder.bind(cast[position])
     }
 
-    override fun getItemCount() = movieList.size
+    override fun getItemCount() = cast.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(movie: MovieDTO) {
+        fun bind(castDTO: CastDTO) {
             itemView.apply {
-                findViewById<TextView>(R.id.title).text = movie.title
-                findViewById<TextView>(R.id.releaseDate).text = movie.release_date
-                findViewById<TextView>(R.id.rate).text = movie.vote_average.toString()
-                movie.poster_path?.let { getImage(it, findViewById(R.id.poster)) }
+                findViewById<TextView>(R.id.name).text = castDTO.name
+                findViewById<TextView>(R.id.character).text = castDTO.character
+                castDTO.profilePath?.let { getImage(it, findViewById(R.id.actor_image)) }
                 itemView.setOnClickListener {
-                    onItemViewClickListener?.onItemViewClick(movie)
+                    onItemViewClickListener?.onItemViewClick(castDTO)
                 }
             }
         }

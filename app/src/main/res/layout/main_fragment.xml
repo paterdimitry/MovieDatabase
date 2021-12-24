@@ -26,47 +26,58 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/popular_films"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/white"
-                android:layout_marginStart="@dimen/margin"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movie_list_popular"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin"
-                android:layout_marginTop="@dimen/margin"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchView"
-                app:layout_goneMarginEnd="10dp"
-                tools:listitem="@layout/movie_list_item" />
+            <!--TODO Для дальнейшей реализации новинки
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/latest_films"
+                android:layout_marginStart="@dimen/margin"
+                android:gravity="center"
+                android:text="@string/latest_movie"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/white"
-                android:layout_marginStart="@dimen/margin"/>
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/latest_poster"
+                android:layout_width="@dimen/item_width"
+                android:layout_height="@dimen/item_poster_height"
+                android:layout_gravity="center"
+                android:contentDescription="@string/poster" />
+
+            <TextView
+                android:id="@+id/latest_title"
+                android:layout_width="@dimen/item_width"
+                android:layout_height="@dimen/item_title_height"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin"
+                android:text="@string/title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="16sp" />-->
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginEnd="@dimen/margin"
+                android:background="@color/white"
+                android:entries="@array/spinner"
+                android:padding="@dimen/padding"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movie_list_latest"
+                android:id="@+id/movie_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/margin"
+                android:layout_marginEnd="@dimen/margin"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_list_popular"
-                app:layout_goneMarginEnd="10dp"
                 tools:listitem="@layout/movie_list_item" />
+
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

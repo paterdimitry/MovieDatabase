@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout"
+    android:layout_width="@dimen/item_width"
+    android:layout_height="@dimen/item_height"
+    android:orientation="vertical"
+    android:background="@color/background">
+    <ImageView
+        android:id="@+id/actor_image"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="@dimen/item_poster_height"
+        android:contentDescription="@string/poster" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="@dimen/item_title_height"
+        android:layout_marginStart="@dimen/margin"
+        android:lines="2"
+        android:textColor="@color/white"
+        android:text="@string/actor"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/character"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:text="@string/character" />
+
+</LinearLayout>
